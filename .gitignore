@@ -1,0 +1,9 @@
+.idea
+azure
+
+classifier/data
+classifier/models/*
+!classifier/models/*.py
+
+server/blog_telegram/.env
+server/logs/telegram.log

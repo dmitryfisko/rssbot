@@ -64,7 +64,8 @@ class CommandReceiveView(View):
                 callback_data = payload.get('data')
                 query_id = payload.get('id')
 
-            print(user_id, cmd, query_id, callback_data, msg)
+            print(user_id, '\n', cmd, '\n', query_id, '\n', callback_data, '\n', msg)
+            return JsonResponse({}, status=200)
 
             if isinstance(cmd, str):
                 command = cmd.split()[0].lower()

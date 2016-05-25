@@ -58,9 +58,9 @@ class CommandReceiveView(View):
             user_id = cmd = query_id = callback_data = None
             if msg:
                 user_id = msg['from']['id']
-                cmd = payload.get('text')  # command
+                cmd = msg['text']
             else:
-                callback_data = msg.get('data')
+                callback_data = payload.get('data')
                 query_id = payload.get('id')
 
             if isinstance(cmd, str):

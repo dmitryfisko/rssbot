@@ -63,13 +63,15 @@ class CommandReceiveView(View):
                 callback_data = payload.get('data')
                 query_id = payload.get('id')
 
+            print(user_id, cmd, query_id, callback_data, msg)
+
             if isinstance(cmd, str):
                 command = cmd.split()[0].lower()
             else:
                 command = None
 
             if command == '/start':
-                create_user(user_id, payload)
+                create_user(user_id, msg)
                 display_help(TelegramBot, user_id)
             elif command == '/help':
                 display_help(TelegramBot, user_id)

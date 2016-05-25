@@ -55,11 +55,12 @@ class CommandReceiveView(View):
             return HttpResponseBadRequest('Invalid request body')
         else:
             msg = payload.get('message')
-            user_id = cmd = query_id = callback_data = None
+            cmd = query_id = callback_data = None
             if msg:
                 user_id = msg['from']['id']
                 cmd = msg['text']
             else:
+                user_id = payload['from']['id']
                 callback_data = payload.get('data')
                 query_id = payload.get('id')
 

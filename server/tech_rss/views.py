@@ -50,14 +50,18 @@ class CommandReceiveView(View):
         logger.info(raw)
 
         try:
-            msg = json.loads(raw)['message']
+            payload = json.loads(raw)
         except ValueError:
             return HttpResponseBadRequest('Invalid request body')
         else:
-            user_id = msg['from']['id']
-            callback_data = msg.get('data')
-            query_id = msg.get('id')
-            cmd = msg.get('text')  # command
+            msg = payload.get('message')
+            user_id = cmd = query_id = callback_data = None
+            if msg:
+                user_id = msg['from']['id']
+                cmd = payload.get('text')  # command
+            else:
+                callback_data = msg.get('data')
+                query_id = payload.get('id')
 
             if isinstance(cmd, str):
                 command = cmd.split()[0].lower()
@@ -65,7 +69,7 @@ class CommandReceiveView(View):
                 command = None
 
             if command == '/start':
-                create_user(user_id, msg)
+                create_user(user_id, payload)
                 display_help(TelegramBot, user_id)
             elif command == '/help':
                 display_help(TelegramBot, user_id)

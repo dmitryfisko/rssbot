@@ -13,7 +13,3 @@ class User(models.Model):
 class Site(models.Model):
     domain = models.CharField(max_length=40, primary_key=True)
     users = models.ManyToManyField(User)
-
-
-class Post(models.Model):
-    category = models.IntegerField()

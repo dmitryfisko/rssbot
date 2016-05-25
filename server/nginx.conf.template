@@ -2,10 +2,9 @@ server {
         listen 80;
         listen 443 ssl;
 
-        server_name bot.khashtamov.com;
-
-        ssl_certificate /etc/letsencrypt/live/bot.khashtamov.com/fullchain.pem;
-        ssl_certificate_key /etc/letsencrypt/live/bot.khashtamov.com/privkey.pem;
+        server_name 40.79.34.127;
+        ssl_certificate /etc/nginx/ssl/YOURPUBLIC.pem;
+        ssl_certificate_key /etc/nginx/ssl/YOURPRIVATE.key;
 
         location / {
             proxy_set_header Host $http_host;    
@@ -16,5 +15,5 @@ server {
             proxy_set_header X-Scheme $scheme;    
 
             proxy_pass http://localhost:8001/;    
-    }
+        }
 }

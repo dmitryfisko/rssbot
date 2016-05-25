@@ -5,7 +5,5 @@ classifier/data
 classifier/models/*
 !classifier/models/*.py
 
-*.pyc
-
 server/blog_telegram/.env
 server/logs/telegram.log

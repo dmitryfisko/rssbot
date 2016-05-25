@@ -59,7 +59,7 @@ class CommandReceiveView(View):
                 payload = callback
 
             msg = payload['message']
-            user_id = msg['from']['id']
+            user_id = msg['chat']['id']
             cmd = msg['text']
 
             query_id = payload.get('id')

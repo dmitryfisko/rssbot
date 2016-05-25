@@ -58,6 +58,9 @@ class CommandReceiveView(View):
             if callback:
                 payload = callback
 
+            print(payload, '\n')
+            return JsonResponse({}, status=200)
+
             user_id = payload['from']['id']
             query_id = payload.get('id')
             callback_data = payload.get('data')

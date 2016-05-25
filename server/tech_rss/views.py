@@ -54,20 +54,17 @@ class CommandReceiveView(View):
         except ValueError:
             return HttpResponseBadRequest('Invalid request body')
         else:
-            msg = payload.get('message')
-            print(payload)
-            return JsonResponse({}, status=200)
+            callback = payload.get('callback_query')
+            if callback:
+                payload = callback
 
-            cmd = query_id = callback_data = None
-            if msg:
-                user_id = msg['from']['id']
-                cmd = msg['text']
-            else:
-                user_id = payload['from']['id']
-                callback_data = payload.get('data')
-                query_id = payload.get('id')
+            user_id = payload['from']['id']
+            query_id = payload.get('id')
+            callback_data = payload.get('data')
+            msg = payload['message']
+            cmd = msg['text']
 
-            print(user_id, '\n', cmd, '\n', query_id, '\n', callback_data)
+            print(user_id, '\n', cmd, '\n', query_id, '\n', callback_data, '\n', msg)
 
             if isinstance(cmd, str):
                 command = cmd.split()[0].lower()

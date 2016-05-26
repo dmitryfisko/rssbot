@@ -180,7 +180,6 @@ def send_site_reading_started(bot, command, user_id):
     if not is_site_added:
         if not get_rss_feeds_from_url(url):
             text = 'Указанный сайт не поддерживает RSS.'
-            text += '\nПример: */add habr.ru*'
             bot.sendMessage(user_id, text=text, parse_mode='Markdown')
             return
 

@@ -15,6 +15,7 @@ from .utils import parse_planetpy_rss, create_user, send_inline_add_filters, sen
     send_notification_added_filter, send_notification_removed_filter, send_site_reading_started, \
     send_site_reading_stopped_inline, display_help, send_notification_reading_stopped
 
+TelegramBot = telepot.Bot(settings.TELEGRAM_BOT_TOKEN)
 logger = logging.getLogger('telegram.bot')
 
 
@@ -68,33 +69,32 @@ class CommandReceiveView(View):
             else:
                 command = None
 
-            bot = telepot.Bot(settings.TELEGRAM_BOT_TOKEN)
             if command == '/start':
                 create_user(user_id, msg)
-                display_help(bot, user_id)
+                display_help(TelegramBot, user_id)
             elif command == '/help':
-                display_help(bot, user_id)
+                display_help(TelegramBot, user_id)
             elif command == '/read':
-                send_site_reading_started(bot, cmd, user_id)
+                send_site_reading_started(TelegramBot, cmd, user_id)
             elif command == '/stop':
-                send_site_reading_stopped_inline(bot, user_id)
+                send_site_reading_stopped_inline(TelegramBot, user_id)
             elif command == '/addfilter':
-                send_inline_add_filters(bot, user_id)
+                send_inline_add_filters(TelegramBot, user_id)
             elif command == '/remfilter':
-                send_inline_remove_filters(bot, user_id)
+                send_inline_remove_filters(TelegramBot, user_id)
             elif callback_data:
                 data_command, second_param = callback_data.split('_')
                 if data_command == 'addfilter':
                     filter_num = int(second_param)
-                    send_notification_added_filter(bot, user_id, query_id, filter_num)
+                    send_notification_added_filter(TelegramBot, user_id, query_id, filter_num)
                 elif data_command == 'remfilter':
                     filter_num = int(second_param)
-                    send_notification_removed_filter(bot, user_id, query_id, filter_num)
+                    send_notification_removed_filter(TelegramBot, user_id, query_id, filter_num)
                 elif data_command == 'stop':
                     domain = second_param
-                    send_notification_reading_stopped(bot, user_id, query_id, domain)
+                    send_notification_reading_stopped(TelegramBot, user_id, query_id, domain)
             else:
-                bot.sendMessage(user_id, 'I do not understand you, Sir!')
+                TelegramBot.sendMessage(user_id, 'I do not understand you, Sir!')
 
         return JsonResponse({}, status=200)
 

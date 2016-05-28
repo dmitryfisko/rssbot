@@ -1,15 +1,12 @@
 # -*- coding: utf8 -*-
-import urllib
-from urllib.error import HTTPError, URLError
 from urllib.parse import urlparse
-from urllib.request import urlopen
 from xml.etree import cElementTree
 
 import requests
-from bs4 import BeautifulSoup
 from django.template.loader import render_to_string
 from telepot.namedtuple import InlineKeyboardMarkup, InlineKeyboardButton
 
+from rss_parser.utils import get_rss_feeds_from_url
 from tech_rss.models import User, Site
 
 CATEGORIES_SHORT = [
@@ -125,31 +122,6 @@ def send_notification_removed_filter(bot, user_id, query_id, filter_num):
         user.categories.remove(filter_num)
         user.save()
         bot.answerCallbackQuery(query_id, text='Фильтр успешно удалён.')
-
-
-def get_rss_feeds_from_url(url):
-    try:
-        req = urllib.request.Request(
-            url,
-            headers={
-                'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_3) '
-                              'AppleWebKit/537.36 (KHTML, like Gecko) '
-                              'Chrome/35.0.1916.47 Safari/537.36'
-            }
-        )
-        page = urlopen(req).read()
-        soup = BeautifulSoup(page, "lxml")
-
-        rss_links = soup.findAll('link', type='application/rss+xml')
-        rss_feeds = [link['href'] for link in rss_links]
-        if len(rss_feeds) > 0:
-            return rss_feeds
-        else:
-            return None
-    except HTTPError as _:
-        return None
-    except URLError as _:
-        return None
 
 
 def send_site_reading_started(bot, command, user_id):

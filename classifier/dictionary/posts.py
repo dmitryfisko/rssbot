@@ -6,15 +6,17 @@ import re
 import ijson
 import pymorphy2
 
-from constants import POSTS_FILE_PATH, RAW_POSTS_FILE_PATH
+from classifier.constants import POSTS_FILE_PATH, RAW_POSTS_FILE_PATH
 
 
 class PostJSONWriter(object):
-    def __init__(self):
-        self._file = open(POSTS_FILE_PATH, 'w')
-        self._file.write('[')
-        self._regex_broad = re.compile(ur'[а-яёА-ЯЁa-zA-Z0-9_\-\+]+', re.U)
-        self._regex_sym = re.compile(ur'^[а-яёА-ЯЁa-zA-Z]+.*$', re.U)
+    def __init__(self, write_file=True):
+        self.write_file = write_file
+        if write_file:
+            self._file = open(POSTS_FILE_PATH, 'w')
+            self._file.write('[')
+        self._regex_broad = re.compile('[а-яёА-ЯЁa-zA-Z0-9_\-\+]+', re.U)
+        self._regex_sym = re.compile('^[а-яёА-ЯЁa-zA-Z]+.*$', re.U)
         self._morph = pymorphy2.MorphAnalyzer()
 
     def divide_text(self, text):
@@ -39,9 +41,10 @@ class PostJSONWriter(object):
         self._file.write(post_json)
 
     def __del__(self):
-        self._file.seek(-1, os.SEEK_END)
-        self._file.write(']')
-        self._file.close()
+        if self.write_file:
+            self._file.seek(-1, os.SEEK_END)
+            self._file.write(']')
+            self._file.close()
 
 
 def main():

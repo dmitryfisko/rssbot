@@ -6,28 +6,9 @@ import requests
 from django.template.loader import render_to_string
 from telepot.namedtuple import InlineKeyboardMarkup, InlineKeyboardButton
 
+from classifier.constants import CATEGORIES_SHORT
 from rss_parser.utils import get_rss_feeds_from_url
-from tech_rss.models import User, Site
-
-CATEGORIES_SHORT = [
-    'Веб разработка',
-    'Безопасность',
-    'Программирование',
-    'Алгоритмы',
-    'Системное программирование',
-    'Данные',
-    'Железо',
-    'Сеть',
-    'Администрирование',
-    'Мобильные приложения',
-    'Математика',
-    'Тестирование',
-    'Машинное обучение',
-    'Бизнес',
-    'Законодательство',
-    'Научно-популярное',
-    'Дизайн'
-]
+from tech_rss.models import Site, User
 
 
 def display_help(bot, user_id):
@@ -132,7 +113,9 @@ def send_site_reading_started(bot, command, user_id):
         else:
             text = 'Указано несколько сайтов.'
 
-        text += '\nПример: */add habr.ru*'
+        text += ' Пример:'
+        bot.sendMessage(user_id, text=text, parse_mode='Markdown')
+        text = '*/add habr.ru*'
         bot.sendMessage(user_id, text=text, parse_mode='Markdown')
         return
 
@@ -141,8 +124,9 @@ def send_site_reading_started(bot, command, user_id):
         url = 'http://' + url
     domain = urlparse(url).netloc
     if not domain:
-        text = 'Указан неправильный адресс сайта.'
-        text += '\nПример: */add habr.ru*'
+        text = 'Указан неправильный адресс сайта. Пример:'
+        bot.sendMessage(user_id, text=text, parse_mode='Markdown')
+        text = '*/add habr.ru*'
         bot.sendMessage(user_id, text=text, parse_mode='Markdown')
         return
 

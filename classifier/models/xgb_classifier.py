@@ -10,8 +10,11 @@ class XgbClassifier:
         self.depth = depth
         self.num_round = num_round
         self.threads = threads
+        self.clf = None
+        self.feature_num = None
+        self.feature_names = None
 
-    def train_predict(self, X_train, y_train, X_test):
+    def train(self, X_train, y_train):
         xgmat_train = xgb.DMatrix(X_train, label=y_train)
         param = {'objective': 'multi:softmax',
                  'num_class': NUM_CLASSES,
@@ -35,9 +38,12 @@ class XgbClassifier:
         # xgmat_test.set_base_margin(tmp_test)
         # bst = xgb.train(param, xgmat_train, self.exist_num_round, watchlist)
 
-        clf = xgb.train(param, xgmat_train, num_round, watchlist)
-        feature_num = len(xgmat_train.feature_names)
-        X_test[0, feature_num - 1] = 1e-7
-        xgmat_test = xgb.DMatrix(X_test, feature_names=xgmat_train.feature_names)
-        pred = clf.predict(xgmat_test)
+        self.clf = xgb.train(param, xgmat_train, num_round, watchlist)
+        self.feature_num = len(xgmat_train.feature_names)
+        self.feature_names = xgmat_train.feature_names
+
+    def predict(self, x_test):
+        x_test[0, self.feature_num - 1] = 1e-7
+        xgmat_test = xgb.DMatrix(x_test, feature_names=self.feature_names)
+        pred = self.clf.predict(xgmat_test)
         return pred

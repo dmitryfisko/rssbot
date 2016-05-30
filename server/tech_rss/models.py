@@ -13,10 +13,17 @@ class User(models.Model):
     categories = fields.ArrayField(models.IntegerField())
 
 
+class Post(models.Model):
+    id = models.CharField(max_length=100, primary_key=True)
+    category = models.IntegerField()
+    title = models.CharField(max_length=250)
+    url = models.CharField(max_length=100)
+
+
 class Site(models.Model):
     domain = models.CharField(max_length=40, primary_key=True)
     users = models.ManyToManyField(User)
-    posts = models.ManyToManyField(User)
+    posts = models.ManyToManyField(Post)
 
     def get_new_news(self):
         feeds = get_rss_feeds_from_url(self.domain)
@@ -34,22 +41,16 @@ class Site(models.Model):
         news = []
         for page in all_news:
             page_id = self.domain + '_' + page['id']
-            was_post = self.post_set.filter(pk=page_id).count()
+            was_post = Post.objects.filter(pk=page_id).count()
             if was_post:
                 continue
 
             item = dict()
-            item['title'] = page_id['title_detail']['value']
+            item['id'] = page_id
+            item['title'] = page['title_detail']['value']
             item['summary'] = page['summary_detail']['value']
             item['url'] = page['link']
 
             news.append(item)
 
         return news
-
-
-class Post(models.Model):
-    id = models.CharField(max_length=100)
-    category = models.IntegerField()
-    url = models.CharField(max_length=100, primary_key=True)
-    site = models.ForeignKey(Site, on_delete=models.CASCADE)

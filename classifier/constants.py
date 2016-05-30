@@ -17,8 +17,8 @@ TF_TFIDF_TRAIN_FILE_PATH = PROJECT_DATA_FOLDER + 'data_tfidf7_train.tfrecords'
 TF_TFIDF_EVAL_FILE_PATH = PROJECT_DATA_FOLDER + 'data_tfidf7_eval.tfrecords'
 TF_TFIDF_VECTORIZER_FILE_PATH = PROJECT_DATA_FOLDER + 'data_tfidf7_vectorizer.pickle'
 
-XGBOOST_PICKLE_CLF = PROJECT_DATA_FOLDER + 'xgboost_classifier.pickle'
-XGBOOST_PICKLE_VECTORIZER = PROJECT_DATA_FOLDER + 'xgboost_vectorizer.pickle'
+XGBOOST_PICKLE_CLF = PROJECT_DATA_FOLDER + 'xgboost_classifier_mid.pickle'
+XGBOOST_PICKLE_VECTORIZER = PROJECT_DATA_FOLDER + 'xgboost_vectorizer_mid.pickle'
 
 CATEGORIES = [
     [u'разработка веб-сайтов', u'браузеры', u'jquery', u'html', u'javascript', u'php', u'монетизация веб-сервисов',

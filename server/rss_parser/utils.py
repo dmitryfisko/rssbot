@@ -4,6 +4,7 @@ import urllib
 from urllib.error import HTTPError, URLError
 from urllib.request import urlopen
 
+from celery.signals import worker_process_init
 from django.core.cache import cache
 
 from bs4 import BeautifulSoup
@@ -25,6 +26,21 @@ def single_instance_task(timeout):
         return wrapper
 
     return task_exc
+
+
+def send_post_to_subscribers(bot, users_id, url, title):
+    text = title + '\n' + url
+    for user_id in users_id:
+        bot.sendMessage(user_id, text=text)
+
+
+@worker_process_init.connect
+def fix_multiprocessing(**kwargs):
+    from multiprocessing import current_process
+    try:
+        current_process()._config
+    except AttributeError:
+        current_process()._config = {'semprefix': '/mp'}
 
 
 def get_rss_feeds_from_url(url):

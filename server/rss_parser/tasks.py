@@ -39,6 +39,7 @@ def load_sites_feeds():
 
     clf = Classifier()
     for site in Site.objects.all():
+        print('Starting {}'.format(site.domain))
         news = site.get_new_news()
 
         if not news:

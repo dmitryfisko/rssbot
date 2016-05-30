@@ -32,7 +32,7 @@ def save_post(category, page, site):
     return url, title
 
 
-@periodic_task(run_every=timedelta(minutes=60), ignore_result=True)
+@periodic_task(run_every=timedelta(minutes=30), ignore_result=True)
 def load_sites_feeds():
     from tech_rss.models import Site
     fix_multiprocessing()
